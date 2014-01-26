@@ -1,12 +1,12 @@
 #ifndef COLOR_T_H_
 #define COLOR_T_H_
 
-class color_t
+class Color_t
 {
 	public:
 		double r, g, b;//red, blue and green components respectively
 		//Default Constructor
-		color_t(double a, double b, double c)
+		Color_t(double a, double b, double c)
 		{
 			r = a;//red
 			g = b;//green
@@ -14,7 +14,7 @@ class color_t
 		}
 
 		//Default Destructor
-		//~color_t();
+		//~Color_t();
 
 		//sets RGB values
 		void setcolor(double a,double b,double c)
@@ -25,7 +25,7 @@ class color_t
 		}
 
 		//Copy Constructor
-		color_t(color_t& k)
+		Color_t(Color_t& k)
 		{
 			r = k.r;//red
 			g = k.g;//green
