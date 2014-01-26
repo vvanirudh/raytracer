@@ -1,6 +1,6 @@
 #ifndef RAY_T
-#define RAY_T value
-class ray_t
+#define RAY_T
+class Ray_t
 {
 	public:
 		Point_t p; // the starting point of the ray
@@ -8,19 +8,19 @@ class ray_t
 		Vector_t v; // this gives the direction of the ray
 
 		//Default Constructor
-		ray_t()
+		Ray_t()
 		{
 
 		}
 
-		ray_t(Point_t a, Vector_t b)
+		Ray_t(Point_t a, Vector_t b)
 		{
 			p = a;
 			v = b;
 		}
 
 		//Destructor
-		~ray_t();
+		//~Ray_t();
 
 		Point_t getp() const
 		{
