@@ -53,4 +53,44 @@ public:
 	}
 };
 
+Vector_t operator+(const Vector_t& v1, const Vector_t& v2)
+{
+	return Vector_t(v1.x+v2.x, v1.y+v2.y, v1.z+v2.z);
+}
+
+Vector_t operator-(const Vector_t& v1, const Vector_t& v2)
+{
+	return Vector_t(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z);
+}
+
+Vector_t operator*(double v, const Vector_t& v2)
+{
+	return Vector_t(v*v2.x, v*v2.y, v*v2.z);
+}
+
+Vector_t operator*(const Vector_t& v1, double v)
+{
+	return Vector_t(v*v1.x, v*v1.y, v*v1.z);
+}
+
+double operator*(const Vector_t& v1, const Vector_t& v2)
+{
+	return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
+}
+
+Vector_t operator^(const Vector_t& v1, const Vector_t& v2)
+{
+	return Vector_t(v1.y*v2.z - v1.z*v2.y, v1.z*v2.x - v1.x*v2.z, v1.x*v2.y - v1.y*v2.x);
+}
+
+bool operator==(const Vector_t& v1, const Vector_t& v2)
+{
+	return v1.x==v2.x && v1.y==v2.y && v1.z==v2.z;
+}
+
+ostream& operator<<(ostream& out, const Vector_t& v)
+{
+	out<<"["<<v.x<<","<<v.y<<","<<v.z<<"]";
+	return out;
+}
 #endif
