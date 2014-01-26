@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <iostream>
+#include "Vector_t.h"
 
 using namespace std;	
 
@@ -32,6 +33,7 @@ public:
 		z = p.z;
 		return *this;
 	}
+
 
 	double distanceBetween(Point_t& p)
 	{
