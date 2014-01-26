@@ -34,7 +34,6 @@ public:
 		return *this;
 	}
 
-
 	double distanceBetween(Point_t& p)
 	{
 		double d = sqrt((p.x-x)*(p.x-x) + (p.y-y)*(p.y-y) + (p.z-z)*(p.z-z));
@@ -42,5 +41,26 @@ public:
 	}
 
 };
+
+Vector_t operator-(const Point_t& p1, const Point_t& p2)
+{
+	return Vector_t(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
+}
+
+Point_t operator*(double v, const Point_t& p)
+{
+	return Point_t(v*p.x, v*p.y, v*p.z);
+}
+
+Point_t operator*(const Point_t& p, double v)
+{
+	return Point_t(v*p.x, v*p.y, v*p.z);
+}
+
+ostream& operator<<(ostream& out, const Point_t& p)
+{
+	out<<"("<<p.x<<","<<p.y<<","<<p.z<<")";
+	return out;
+}
 
 #endif	

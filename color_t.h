@@ -1,3 +1,6 @@
+#ifndef COLOR_T_H_
+#define COLOR_T_H_
+
 class color_t
 {
 	public:
@@ -54,3 +57,5 @@ class color_t
 			return b;
 		}
 };
+
+#endif
