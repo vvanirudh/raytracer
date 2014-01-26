@@ -1,3 +1,6 @@
+#ifndef COLOR_T_H_
+#define COLOR_T_H_
+
 class color_t
 {
 	public:
@@ -29,28 +32,30 @@ class color_t
 			b = k.b;//blue
 		}
 		
-		void color_t::setr(double k)
+		void setr(double k)
 	 	{
 	   		r = k;
 	 	}
-		void color_t::setg(double k)
+		void setg(double k)
 	 	{
 	   		g = k;
 	 	}
-		void color_t::setb(double k)
+		void setb(double k)
 	 	{
 	   		b = k;
 	 	}
-	 	double color_t::getr() const
+	 	double getr() const
 		{
 			return r;
 		}
-	 	double color_t::getg() const
+	 	double getg() const
 		{
 			return g;
 		}
-	 	double color_t::getb() const
+	 	double getb() const
 		{
 			return b;
 		}
 };
+
+#endif
