@@ -15,6 +15,26 @@ public:
 
 	double reflectance, transmittance;
 
+	void setDiffColor(Color_t a)
+	{
+		diffuseColor = a;
+	}
+
+	void setSpecColor(Color_t a)
+	{
+		specularColor = a;
+	}
+
+	void setReflectance(double a)
+	{
+		reflectance = a;
+	}
+
+	void setTransmittance(double a)
+	{
+		transmittance = a;
+	}
+
 	virtual bool intersect(Ray_t r, double* distance, Point_t* pointOfIntersection);
 
 	virtual Vector_t getNormal(Point_t);
