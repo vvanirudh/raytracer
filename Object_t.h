@@ -4,6 +4,7 @@
 #include "Vector_t.h"
 #include "Point_t.h"
 #include "color_t.h"
+#include "ray_t.h"
 
 class Object_t
 {
@@ -13,6 +14,10 @@ public:
 	Color_t diffuseColor, specularColor;
 
 	double reflectance, transmittance;
+
+	virtual bool intersect(Ray_t r, double* distance, Point_t* pointOfIntersection);
+
+	virtual Vector_t getNormal(Point_t);
 };
 
 #endif
