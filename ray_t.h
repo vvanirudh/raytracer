@@ -18,18 +18,17 @@ class Ray_t
 			p = a;
 			v = b;
 		}
-
-		//Destructor
-		//~Ray_t();
-
-		Point_t getp() const
+		void setpoint(Point_t a)
 		{
-			return p;
+			p = a;
 		}
-
-		Vector_t getv() const
+		void setDirection(Vector_t a)
 		{
-			return v;
+			v = a;
+		}
+		Point_t intersect(Ray_t a)
+		{
+			
 		}
 };
 #endif
