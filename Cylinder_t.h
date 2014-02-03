@@ -14,6 +14,8 @@ public:
 	Cylinder_t(Point_t, double, double, double);
 	bool intersect(Ray_t, double*, Point_t*);
 	Vector_t getNormal(Point_t);
+
+	/* http://tog.acm.org/resources/GraphicsGems/gemsiv/ray_cyl.c */
 };
 
 #endif
