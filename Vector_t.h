@@ -39,12 +39,28 @@ public:
 		return Vector_t(-x, -y, -z);
 	}
 
+	Vector_t& operator+=(const Vector_t& v)
+	{
+		x+=v.x;
+		y+=v.y;
+		z+=v.z;
+		return *this;
+	}
+
+	Vector_t& operator*=(double s)
+	{
+		x*=s;
+		y*=s;
+		z*=s;
+		return *this;
+	}
+
 	double length()
 	{
 		return (double) sqrt(x*x + y*y + z*z);
 	}
 
-	void makeUnitVector()
+	void normalizeVector()
 	{
 		double scale = 1.0/this.length();
 		x *= scale;
@@ -86,6 +102,16 @@ Vector_t operator^(const Vector_t& v1, const Vector_t& v2)
 bool operator==(const Vector_t& v1, const Vector_t& v2)
 {
 	return v1.x==v2.x && v1.y==v2.y && v1.z==v2.z;
+}
+
+bool operator!=(const Vector_t& v1, const Vector_t& v2)
+{
+	return !(v1==v2);
+}
+
+Vector_t operator/(const Vector_t& v, double s)
+{
+	return Vector_t((v.x)/s, (v.y)/s, (v.z)/s);
 }
 
 ostream& operator<<(ostream& out, const Vector_t& v)

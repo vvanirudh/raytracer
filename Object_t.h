@@ -35,9 +35,14 @@ public:
 		transmittance = a;
 	}
 
-	virtual bool intersect(Ray_t r, double* distance, Point_t* pointOfIntersection);
+	Color_t getColor()
+	{
+		return diffuseColor;
+	}
 
-	virtual Vector_t getNormal(Point_t);
+	virtual bool intersect(Ray_t r, double* distance, Point_t* pointOfIntersection) = 0;
+	// These two functions are abstract functions needed to be defined in the subclasses of the class Object_t.h
+	virtual Vector_t getNormal(Point_t) = 0;
 };
 
 #endif

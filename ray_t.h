@@ -3,9 +3,9 @@
 class Ray_t
 {
 	public:
-		Point_t p; // the starting point of the ray
+		Point_t org; // the starting point of the ray
 
-		Vector_t v; // this gives the direction of the ray
+		Vector_t dir; // this gives the direction of the ray
 
 		//Default Constructor
 		Ray_t()
@@ -15,20 +15,16 @@ class Ray_t
 
 		Ray_t(Point_t a, Vector_t b)
 		{
-			p = a;
-			v = b;
+			org = a;
+			dir = b;
 		}
-		void setpoint(Point_t a)
+		void setOrg(Point_t a)
 		{
-			p = a;
+			org = a;
 		}
 		void setDirection(Vector_t a)
 		{
-			v = a;
-		}
-		Point_t intersect(Ray_t a)
-		{
-			
+			dir = a;
 		}
 };
 #endif
