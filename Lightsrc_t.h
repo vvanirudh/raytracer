@@ -1,17 +1,21 @@
 #ifndef LIGHTSRC_T
 #define LIGHTSRC_T
+
+#include "Color_t.h"
+#include "Point_t.h"
+
 class Lightsrc_t
 {
 public:
 	Point_t p;//Position of Light Source
-	color_t c;//Color of the Light
+	Color_t c;//Color of the Light
 	//Default Constructor
 	Lightsrc_t()
 	{
 
 	}
 
-	Lightsrc_t(Point_t a, color_t b)
+	Lightsrc_t(Point_t a, Color_t b)
 	{
 		p = a;
 		c = b;
@@ -22,7 +26,7 @@ public:
 		return p;
 	}
 
-	color_t getcolor() const
+	Color_t getColor() const
 	{
 		return c;
 	}

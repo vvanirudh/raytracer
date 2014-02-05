@@ -17,7 +17,7 @@ class Color_t
 		//~Color_t();
 
 		//sets RGB values
-		void setcolor(double a,double b,double c)
+		void setColor(double a,double b,double c)
 		{	
 			r = a;//red
 			g = b;//green

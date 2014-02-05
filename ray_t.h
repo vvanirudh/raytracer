@@ -8,9 +8,9 @@ class Ray_t
 		Vector_t dir; // this gives the direction of the ray
 
 		//Default Constructor
-		Ray_t()
+		Ray_t(Point_t p)
 		{
-
+			org = p;
 		}
 
 		Ray_t(Point_t a, Vector_t b)
