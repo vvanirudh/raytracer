@@ -4,7 +4,7 @@
 #include "Object_t.h"
 #include <list>
 #include "Lightsrc_t.h"
-#include "Ray_t.h"
+#include "ray_t.h"
 #include "Point_t.h"
 
 class Scene_t

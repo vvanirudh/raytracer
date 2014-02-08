@@ -1,5 +1,17 @@
 #include <iostream>
 #include <GL/glut.h>
+#include <GL/gl.h>
+#include "Camera_t.h"
+#include "Lightsrc_t.h"
+#include "Object_t.h"
+#include "Phong_t.h"
+#include "Point_t.h"
+#include "Scene_t.h"
+#include "Sphere_t.h"
+#include "Triangle_t.h"
+#include "Vector_t.h"
+#include "color_t.h"
+#include "ray_t.h"
 
 using namespace std;
 
@@ -24,7 +36,7 @@ void init(char * file)
 
 	outputColor = new Color_t*[HEIGHT];
 	for(int i=0;i<HEIGHT;i++)
-		outputColor = new Color_t[WIDTH];
+		outputColor = new Color_t*[WIDTH];
 
 	/** CODE TO BE REMOVED AND REPLACED WITH THE FILE INPUT CODE **/
 

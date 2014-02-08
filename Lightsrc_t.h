@@ -1,7 +1,7 @@
 #ifndef LIGHTSRC_T
 #define LIGHTSRC_T
 
-#include "Color_t.h"
+#include "color_t.h"
 #include "Point_t.h"
 
 class Lightsrc_t

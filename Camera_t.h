@@ -4,8 +4,8 @@
 #include "globals.h"
 #include "Point_t.h"
 #include "Scene_t.h"
-#include "Color_t.h"
-#include "Ray_t.h"
+#include "color_t.h"
+#include "ray_t.h"
 #include "Object_t.h"
 #include <cstdlib>
 #include <cmath>
