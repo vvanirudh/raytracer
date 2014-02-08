@@ -5,6 +5,7 @@
 #include "Point_t.h"
 #include "color_t.h"
 #include "ray_t.h"
+#include "Phong_t.h"
 
 class Object_t
 {
@@ -13,7 +14,9 @@ public:
 
 	Color_t diffuseColor, specularColor;
 
-	double reflectance, transmittance;
+	Phong_t * phong;
+
+	double reflectance, transmittance, refIndex;
 
 	void setDiffColor(Color_t a)
 	{
@@ -35,9 +38,25 @@ public:
 		transmittance = a;
 	}
 
+	void setRefIndex(double r)
+	{
+		refIndex = r;
+	}
+
 	Color_t getColor()
 	{
 		return diffuseColor;
+	}
+
+	void setPhong(Phong_t p)
+	{
+		*phong = p;
+	}
+
+	void setMaterial(Color diff, Color spec, double ambCoeff, double diffCoeff, double specCoeff, double exponent)
+	{
+		diffuseColor = diff; specularColor = spec;
+		phong->setCoeff(ambCoeff, diffCoeff, specCoeff, exponent);
 	}
 
 	virtual bool intersect(Ray_t r, double* distance, Point_t* pointOfIntersection) = 0;

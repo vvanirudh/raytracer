@@ -16,6 +16,11 @@ public:
 	list<Object_t*> Objects;
 	list<Lightsrc_t*> Lights;
 
+	Scene_t()
+	{
+		
+	}
+
 	Scene_t(double n, double s)
 	{
 		nearPlane = n;

@@ -21,7 +21,7 @@ public:
 		up = u;
 	}
 
-	void render(Scene_t s, int h, int w, Color_t** finalColor)
+	void render(Scene_t s, int h, int w, Color_t** finalColor, int depth)
 	{
 		Ray_t cameraRay(pos);
 
@@ -31,8 +31,53 @@ public:
 			{
 				finalColor[x][y].setColor(0,0,0);
 				s.releaseRay(&cameraRay,x,y);
-				finalColor[x][y].setColor(computeColor(cameraRay, 0, s));
+				finalColor[x][y].setColor(computeColor(cameraRay, depth, s));
 			}
+		}
+	}
+
+	Color_t computeColor(Ray_t r, int depth, Scene_t s)
+	{
+		Color_t pixelColor;
+		list<Object_t*>::iterator objItr;
+		bool intersectRay = false;
+		Object_t * obj;
+		Point_t tempInt;
+		Point_t finalInt;
+		double tempDist = 0.0;
+		double finalDist = 1000000.0;
+		bool shadow = false;
+		double shadowDist;
+
+		for(objItr = s.Objects.begin(); objItr!=s.Objects.end(); ++objItr)
+		{
+			intersectRay = (*objItr)->intersect(r, &tempDist, &tempInt);
+			if(intersectRay)
+			{
+				if(tempInt != r.org)
+				{
+					shadow = true;
+					if(abs(tempDist) < finalDist)
+					{
+						finalDist = abs(tempDist);
+						finalInt = tempInt;
+						obj = *objItr;
+					}
+				}
+			}
+		}
+
+		if(shadow)
+		{
+			Data data;
+
+			intersectRay = false;
+			tempDist = 0.0;
+			finalDist = 1000000.0;
+
+			bool inShadow = false;
+
+			
 		}
 	}
 };

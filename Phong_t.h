@@ -25,7 +25,21 @@ public:
 	Color_t ambColor;
 	Color_t color;
 
+	Phong_t()
+	{
+
+	}
+
 	Phong_t(double amb, double dif, double spec, double exponent)
+	{
+		ka = amb;
+		kd = dif;
+		ks = spec;
+		n = exponent;
+	}
+
+
+	void setCoeff(double a, double d, double s, double e)
 	{
 		ka = amb;
 		kd = dif;
