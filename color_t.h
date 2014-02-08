@@ -13,6 +13,11 @@ class Color_t
 			b = c;//blue
 		}
 
+		Color_t()
+		{
+
+		}
+
 		//Default Destructor
 		//~Color_t();
 
@@ -22,6 +27,13 @@ class Color_t
 			r = a;//red
 			g = b;//green
 			b = c;//blue
+		}
+
+		void setColor(Color_t c)
+		{
+			r = c.r;
+			g = c.g;
+			b = c.b;	
 		}
 
 		//Copy Constructor

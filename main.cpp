@@ -8,9 +8,9 @@ int  WIDTH =  500;
 double NEARPLANE = 1;
 double SCALEFACTOR = 0.0075;
 
-int depth;
+int DEPTH;
 
-Color_t outputColor[HEIGHT][WIDTH];
+Color_t ** outputColor;
 
 
 void init(char * file)
@@ -22,10 +22,13 @@ void init(char * file)
 	glLoadIdentity();
 	gluOrtho2D(0,HEIGHT,WIDTH,0);
 
+	outputColor = new Color_t*[HEIGHT];
+	for(int i=0;i<HEIGHT;i++)
+		outputColor = new Color_t[WIDTH];
 
 	/** CODE TO BE REMOVED AND REPLACED WITH THE FILE INPUT CODE **/
 
-	depth = 0;
+	DEPTH = 0;
 
 	Camera_t camera(Point_t(0.0,0.0,4.0),Point_t(0.0,0.0,0.0),Point_t(0.0,1.0,0.0));
 	Scene_t scene(NEARPLANE,SCALEFACTOR);
@@ -46,7 +49,7 @@ void init(char * file)
 
 	scene.add(&light);
 
-	camera.render(scene, HEIGHT, WIDTH, outputColor, depth);
+	camera.render(scene, HEIGHT, WIDTH, outputColor, 0);
 }
 
 
