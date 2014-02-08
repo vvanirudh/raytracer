@@ -2,6 +2,10 @@
 #define CAMERA_T_H_
 
 #include "globals.h"
+#include "Point_t.h"
+#include "Scene_t.h"
+#include "Color_t.h"
+#include "Ray_t.h"
 
 class Camera_t
 {
