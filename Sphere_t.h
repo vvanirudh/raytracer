@@ -3,24 +3,24 @@
 
 #include "Object_t.h"
 
-class Sphere : public virtual Object_t
+class Sphere_t : public virtual Object_t
 {
 public:
 	Point_t center;
 	double radius;
 
-	Sphere(Point_t c, double r)
+	Sphere_t(Point_t c, double r)
 	{
 		center = c;
 		radius = r;
 	}
 
-	bool intersect(Ray_t r, double* d, Point_t *P);//have to check some vector and point related issues
+	bool intersect(Ray_t r, double* d, Point_t *P)//have to check some vector and point related issues
 	{
 		double a,b,c,D,q,d1,d2,temp; //a,b,c are the coefficients of equation 
-		a = r.v*r.v;
-		b = 2*(r.p - center)*(r.v);
-		c = (r.p - center)*(r.p -center) - radius*radius;
+		a = r.dir*r.dir;
+		b = 2*(r.org - center)*(r.dir);
+		c = (r.org - center)*(r.org -center) - radius*radius;
 		D = b*b - 4*a*c;
 
 		if(D < 0)
@@ -42,11 +42,17 @@ public:
 			dist = d2;
 		}
 
-		*P = r.org + (r.dir)*(*d);
+		(*P).x = r.org.x + (r.dir.x)*(*d);
+		(*P).y = r.org.y + (r.dir.y)*(*d);
+		(*P).z = r.org.z + (r.dir.z)*(*d);
+
+
 		if(*P == r.org)
 		{
 			*d = dist;
-			*P = r.org + (r.dir)*(*d);
+			(*P).x = r.org.x + (r.dir.x)*(*d);
+			(*P).y = r.org.y + (r.dir.y)*(*d);
+			(*P).z = r.org.z + (r.dir.z)*(*d);
 		}
 
 		return true;

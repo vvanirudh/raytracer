@@ -21,12 +21,12 @@ public:
 		c = b;
 	}
 
-	Point_t getPos() const
+	Point_t getPos()
 	{
 		return p;
 	}
 
-	Color_t getColor() const
+	Color_t getColor()
 	{
 		return c;
 	}

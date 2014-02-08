@@ -6,10 +6,10 @@ class Color_t
 	public:
 		double r, g, b;//red, blue and green components respectively
 		//Default Constructor
-		Color_t(double a, double b, double c)
+		Color_t(double a, double bl, double c)
 		{
 			r = a;//red
-			g = b;//green
+			g = bl;//green
 			b = c;//blue
 		}
 
@@ -22,10 +22,10 @@ class Color_t
 		//~Color_t();
 
 		//sets RGB values
-		void setColor(double a,double b,double c)
+		void setColor(double a,double bl,double c)
 		{	
 			r = a;//red
-			g = b;//green
+			g = bl;//green
 			b = c;//blue
 		}
 
@@ -37,13 +37,15 @@ class Color_t
 		}
 
 		//Copy Constructor
+		
+		
 		Color_t(Color_t& k)
 		{
 			r = k.r;//red
 			g = k.g;//green
 			b = k.b;//blue
 		}
-		
+
 		void setr(double k)
 	 	{
 	   		r = k;
@@ -67,6 +69,14 @@ class Color_t
 	 	double getb() const
 		{
 			return b;
+		}
+
+		Color_t& operator=(const Color_t& v)
+		{
+		r = v.r;
+		g = v.g;
+		b = v.b;
+		return *this;
 		}
 };
 

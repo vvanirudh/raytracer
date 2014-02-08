@@ -12,6 +12,11 @@ class Point_t
 public:
 	double x,y,z;
 
+	Point_t()
+	{
+		
+	}
+
 	Point_t(double xx, double yy, double zz)
 	{
 		x = xx;
@@ -26,7 +31,7 @@ public:
 		z = p.z;
 	}
 
-	Point_t& operator=(const Point_t& a)
+	Point_t& operator=(const Point_t& p)
 	{
 		x = p.x;
 		y = p.y;
@@ -60,17 +65,26 @@ public:
 
 Vector_t operator-(const Point_t& p1, const Point_t& p2)
 {
-	return Vector_t(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
+	Vector_t u(p1.x-p2.x, p1.y-p2.y, p1.z-p2.z);
+	return u;
+}
+
+Point_t operator+(const Point_t& p1, const Point_t& p2)
+{
+	Point_t u(p1.x+p2.x, p1.y+p2.y, p1.z+p2.z);
+	return u;
 }
 
 Point_t operator*(double v, const Point_t& p)
 {
-	return Point_t(v*p.x, v*p.y, v*p.z);
+	Point_t u(v*p.x, v*p.y, v*p.z);
+	return u;
 }
 
 Point_t operator*(const Point_t& p, double v)
 {
-	return Point_t(v*p.x, v*p.y, v*p.z);
+	Point_t u(v*p.x, v*p.y, v*p.z);
+	return u;
 }
 
 bool operator==(const Point_t& p1, const Point_t& p2)

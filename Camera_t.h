@@ -9,6 +9,9 @@
 #include "Object_t.h"
 #include <cstdlib>
 #include <cmath>
+#include <iostream>
+
+using namespace std;
 
 class Camera_t
 {
@@ -24,7 +27,7 @@ public:
 		up = u;
 	}
 
-	void render(Scene_t s, int h, int w, Color_t** finalColor, int depth)
+	void render(Scene_t s, int h, int w, Color_t** finalColor, int depth, int DEPTH)
 	{
 		Ray_t cameraRay(pos);
 
@@ -32,14 +35,18 @@ public:
 		{
 			for(int y = -w/2;y<w/2; y++)
 			{
-				finalColor[x][y].setColor(0,0,0);
+				// finalColor[x][y].setColor(0,0,0);
 				s.releaseRay(&cameraRay,x,y);
-				finalColor[x][y].setColor(computeColor(cameraRay, depth, s));
+				// finalColor[x][y].setColor(computeColor(cameraRay, depth, s));
+				Color_t c;
+				c = computeColor(cameraRay, depth, s, DEPTH);
+				// finalColor[x][y] = c;
+				cout<<c.r<<" "<<c.g<<" "<<c.b<<"\n";
 			}
 		}
 	}
 
-	Color_t computeColor(Ray_t r, int depth, Scene_t s)
+	Color_t computeColor(Ray_t r, int depth, Scene_t s, int DEPTH)
 	{
 		Color_t ambientColor(1,1,1);
 		depth++;
@@ -71,11 +78,11 @@ public:
 				}
 			}
 		}
-
+		vector<Data*> dataVec;
+		Data *data;
 		if(shadow)
 		{
-			Data data;
-			vector<Data> dataVec;
+			
 
 			intersectRay = false;
 			tempDist = 0.0;
@@ -87,7 +94,8 @@ public:
 
 			for(lightItr = s.Lights.begin(); lightItr!=s.Lights.end(); ++lightItr)
 			{
-				Ray_t shadowray((*lightItr)->getpos());
+				Ray_t shadowray;
+				shadowray.org = ((*lightItr)->getPos());
 
 				s.releaseShadowRay(&shadowray, &finalInt);
 				Object_t * objRef;
@@ -106,7 +114,7 @@ public:
 						{
 							if(abs(tempDist)< finalDist)
 							{
-								finalDist = abs(tempInt);
+								finalDist = abs(tempDist);
 								objRef = *objItr;
 							}
 
@@ -115,24 +123,26 @@ public:
 					}
 				}
 
-				Data data;
-				data.lSrc = (*lightItr);
-				data.inRay = shadowray;
-				data.normal = obj->getNormal(objInt);
+				
+				data->lSrc = (*lightItr);
+				data->inRay = shadowray;
+				data->normal = obj->getNormal(finalInt);
 
-				Ray_t viewRay(objInt);
+				Ray_t viewRay(finalInt);
 
-				Vector_t viewVec = r.org - objInt;
+				Vector_t viewVec;
+				viewVec = r.org - finalInt;
 				viewVec.normalizeVector();
 				viewRay.setDirection(viewVec);
-				data.viewRay = viewRay;
-				data.point = objInt;
+				data->viewRay = viewRay;
+				data->point = finalInt;
 
-				Ray_t refRay(objInt);
-				Vector_t refDir = 2*((shadowray.dir * data.normal) * (data.normal)) - (shadowray.dir);
+				Ray_t refRay(finalInt);
+				Vector_t refDir;
+				refDir = 2*((shadowray.dir * data->normal) * (data->normal)) - (shadowray.dir);
 				refDir.normalizeVector();
 				refRay.setDirection(refDir);
-				data.refRay = refRay;
+				data->refRay = refRay;
 
 				dataVec.push_back(data);
 			}
@@ -140,7 +150,7 @@ public:
 
 			if(finalDist > shadowDist)
 			{
-				obj->phong->illuminate(dataVec, ambientColor, obj->diffuseColor, obj->specularColor);
+				obj->phong->illuminate(dataVec, ambientColor, obj->diffuseColor, obj->specularColor, obj->diffuseColor);
 				// obj->phong->illuminate()
 			}
 			else
@@ -149,6 +159,7 @@ public:
 			}
 
 			pixelColor = obj->phong->color;
+			cout<<pixelColor.r<<" "<<pixelColor.g<<" "<<pixelColor.b<<endl;
 
 			if(depth < DEPTH)
 			{
@@ -156,14 +167,16 @@ public:
 
 				if((obj->reflectance) > 0.0)
 				{
-					Ray_t reflRay(objInt);
-					Vector_t reflDir = r.dir - 2*(r.dir*data.normal)*(data.normal);
+					Ray_t reflRay(finalInt);
+					Vector_t reflDir;
+					reflDir = r.dir - 2*(r.dir*data->normal)*(data->normal);
 					reflDir.normalizeVector();
 					reflRay.setDirection(reflDir);
 
 					double reflectance = obj->reflectance;
 
-					refColor.setColor(computeColor(reflRay, depth, s));
+					// refColor.setColor(computeColor(reflRay, depth, s, DEPTH));
+					refColor = computeColor(reflRay, depth, s, DEPTH);
 					pixelColor.r += reflectance * refColor.r;
 					pixelColor.b += reflectance * refColor.b;
 					pixelColor.g += reflectance * refColor.g;
@@ -171,13 +184,14 @@ public:
 
 				if((obj->transmittance) > 0.0)
 				{
-					Ray_t transmitRay(objInt);
-					Vector_t normal = -data.normal;
+					Ray_t transmitRay(finalInt);
+					Vector_t normal;
+					normal = -data->normal;
 					double transmittance = obj->transmittance;
 					double refIndex = obj->refIndex;
 					double n = 1/(refIndex);
 
-					if((data.normal * r.dir)<0)
+					if((data->normal * r.dir)<0)
 					{
 						normal = -normal;
 						n = 1/n;
@@ -193,11 +207,12 @@ public:
 						pixelColor.g += transmittance * refColor.g;
 					}
 					else{
-						Vector_t transmitDir = (n * r.dir) + (n * (-(r.dir) * normal) -  tir) * normal;
+						Vector_t transmitDir;
+						transmitDir = (n * r.dir) + (n * (-(r.dir) * normal) -  tir) * normal;
 						transmitDir.normalizeVector();
 						transmitRay.setDirection(transmitDir);
 						Color_t transmitColor;
-						transmitColor.setColor(computeColor(transmitRay, depth, s));
+						transmitColor = (computeColor(transmitRay, depth, s, DEPTH));
 						pixelColor.r += transmittance * transmitColor.r;
 						pixelColor.b += transmittance * transmitColor.b;
 						pixelColor.g += transmittance * transmitColor.g;
@@ -207,7 +222,7 @@ public:
 		}
 		else
 		{
-			pixelColor.setColor(0,0.6,1.0);
+			pixelColor.setColor(0,0.6,0);
 		}
 		return pixelColor;
 	}

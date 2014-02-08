@@ -5,6 +5,9 @@
 #include "Vector_t.h"
 #include "Lightsrc_t.h"
 #include <cmath>
+#include <vector>
+
+using namespace std;
 
 struct Data
 {
@@ -41,54 +44,55 @@ public:
 
 	void setCoeff(double a, double d, double s, double e)
 	{
-		ka = amb;
-		kd = dif;
-		ks = spec;
-		n = exponent;
+		ka = a;
+		kd = d;
+		ks = s;
+		n = e;
 	}
 
-	void illuminate(Data data, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
-	{
-		//SPECULAR COMPONENT
-		ambColor.setColor(ka * ambient.r * objColor.r , ka * ambient.g * objColor.g , ka * ambient.b * objColor.b );
+	// void illuminate(Data data, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
+	// {
+	// 	//SPECULAR COMPONENT
+	// 	ambColor.setColor(ka * ambient.r * objColor.r , ka * ambient.g * objColor.g , ka * ambient.b * objColor.b );
 
-		// DIFFUSE COMPONENT
-		double d = data.inRay.dir * data.normal;
-		Color_t lColor = data.lSrc->getColor();
+	// 	// DIFFUSE COMPONENT
+	// 	double d = data.inRay.dir * data.normal;
+	// 	Color_t lColor = data.lSrc->getColor();
 
-		Color_t diffuseColor(lColor.r * (diffuse.r) * d , lColor.g * (diffuse.g) * d , lColor.b * (diffuse.b) * d);
+	// 	Color_t diffuseColor(lColor.r * (diffuse.r) * d , lColor.g * (diffuse.g) * d , lColor.b * (diffuse.b) * d);
 
-		//SPECULAR COMPONENT
-		double e = data.refRay.dir * data.viewRay.dir;
-		e = pow(e, n);
+	// 	//SPECULAR COMPONENT
+	// 	double e = data.refRay.dir * data.viewRay.dir;
+	// 	e = pow(e, n);
 
-		Color_t specularColor(lColor.r * (specular.r) * e, lColor.g * (specular.g) * e, lColor.b * (specular.b) * e);
+	// 	Color_t specularColor(lColor.r * (specular.r) * e, lColor.g * (specular.g) * e, lColor.b * (specular.b) * e);
 
-		//FINAL COLOR
-		color.setColor(ka * ambColor.r + kd * diffuseColor.r + ks * specularColor.r,
-						ka * ambColor.g + kd * diffuseColor.g + ks * specularColor.g,
-						ka * ambColor.b + kd * diffuseColor.b + ks * specularColor.b);
-	}
+	// 	//FINAL COLOR
+	// 	color.setColor(ka * ambColor.r + kd * diffuseColor.r + ks * specularColor.r,
+	// 					ka * ambColor.g + kd * diffuseColor.g + ks * specularColor.g,
+	// 					ka * ambColor.b + kd * diffuseColor.b + ks * specularColor.b);
+	// }
 
-	void illuminate(vector<Data> vec, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
+	void illuminate(vector<Data*> vec, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
     {
         //SPECULAR COMPONENT
         ambColor.setColor(ka * ambient.r * objColor.r , ka * ambient.g * objColor.g , ka * ambient.b * objColor.b );
 
         double ac_dr = 0,ac_dg = 0,ac_db = 0,ac_sr = 0,ac_sg = 0,ac_sb = 0;
-        for (vector<>::iterator i = vec.begin(); i != vec.end(); ++i)
+        for (vector<Data*>::iterator i = vec.begin(); i != vec.end(); ++i)
         {
             
         // DIFFUSE COMPONENT
-        double d = i->inRay.dir * i->normal;
-        Color_t lColor = i->lSrc->getColor();
+        double d = (*i)->inRay.dir * (*i)->normal;
+        Color_t lColor;
+        lColor = (*i)->lSrc->getColor();
         ac_dr = ac_dr + (lColor.r * (diffuse.r) * d);
         ac_dg = ac_dg + (lColor.g * (diffuse.g) * d);
         ac_db = ac_db + (lColor.b * (diffuse.b) * d); 
         //Color_t diffuseColor(lColor.r * (diffuse.r) * d , lColor.g * (diffuse.g) * d , lColor.b * (diffuse.b) * d);
 
         //SPECULAR COMPONENT
-        double e = i->refRay.dir * i->viewRay.dir;
+        double e = (*i)->refRay.dir * (*i)->viewRay.dir;
         e = pow(e, n);
         ac_sr = ac_sr + (lColor.r * (specular.r) * e);
         ac_sg = ac_sg + (lColor.g * (specular.g) * d);

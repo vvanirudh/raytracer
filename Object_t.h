@@ -48,12 +48,12 @@ public:
 		return diffuseColor;
 	}
 
-	void setPhong(Phong_t p)
+	void setPhong(Phong_t *p)
 	{
-		*phong = p;
+		phong = p;
 	}
 
-	void setMaterial(Color diff, Color spec, double ambCoeff, double diffCoeff, double specCoeff, double exponent)
+	void setMaterial(Color_t diff, Color_t spec, double ambCoeff, double diffCoeff, double specCoeff, double exponent)
 	{
 		diffuseColor = diff; specularColor = spec;
 		phong->setCoeff(ambCoeff, diffCoeff, specCoeff, exponent);
