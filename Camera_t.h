@@ -38,8 +38,16 @@ public:
 				finalColor[x + (h/2)][y + (w/2)].setColor(0,0,0);
 				s.releaseRay(&cameraRay,x,y);
 				// finalColor[x][y].setColor(computeColor(cameraRay, depth, s));
+				Color_t c1, c2, c3, c4;
+				c1 = computeColor(cameraRay, depth, &s, DEPTH);
+				c2 = computeColor(cameraRay, depth, &s, DEPTH);
+				c3 = computeColor(cameraRay, depth, &s, DEPTH);
+				c4 = computeColor(cameraRay, depth, &s, DEPTH);
+
 				Color_t c;
-				c = computeColor(cameraRay, depth, &s, DEPTH);
+				c.r = (c1.r+c2.r+c3.r+c4.r);
+				c.g = (c1.g+c2.g+c3.g+c4.g);
+				c.b = (c1.b+c2.b+c3.b+c4.b);
 				// cout<<c;
 				finalColor[x+(h/2)][y+(w/2)].setColor(c);
 				// cout<<c.r<<" "<<c.g<<" "<<c.b<<"\n";
