@@ -50,7 +50,7 @@ void init()
 
 	/** CODE TO BE REMOVED AND REPLACED WITH THE FILE INPUT CODE **/
 
-	DEPTH = 0;
+	DEPTH = 2;
 
 	Point_t p1(0.0,0.0,4.0);
 	Point_t p2(0.0,0.0,0.0);
@@ -58,26 +58,48 @@ void init()
 	Camera_t camera(p1,p2,p3);
 	Scene_t scene(NEARPLANE,SCALEFACTOR);
 
-	Phong_t ps1;
-	Point_t p4(0.1,1.0, 0.1);
-	Sphere_t s1(p4, 0.6);
-
-	s1.setPhong(&ps1);
-	s1.reflectance = 0.01;
-	s1.transmittance = 0.85;
+	/** FIRST SPHERE **/
+	Point_t center(0,0,0);
+	double radius = 1.0;
+	Phong_t ps;
+	Sphere_t s1(center, radius);
+	s1.setPhong(&ps);
+	s1.reflectance = 1.0;
+	s1.transmittance = 0.0;
 	s1.refIndex = 0.95;
-	
-	Color_t c1(1.0,1.0,1.0);
-	Color_t c2(1.0,1.0,1.0);
-	s1.setMaterial(c1,c2 , 0.75,0.75,0.2, 20.0);
+	Color_t c11(0.0,1.0,1.0);
+	Color_t c12(0.0,1.0,1.0);
+	s1.setMaterial(c11, c12, 0.075,0.75,1.0, 40.0);
 
 	scene.add(&s1);
 
-	Point_t p5(0,5,0);
-	Color_t c3(0.4,0.3,0.5);
-	Lightsrc_t light(p5, c3);
+	/** SECOND SPHERE **/
+	Point_t center2(-2.0,0,0);
+	double radius2 = 0.6;
+	Phong_t ps2;
+	Sphere_t s2(center2, radius2);
+	s2.setPhong(&ps2);
+	s2.reflectance = 1.0;
+	s2.transmittance = 0.0;
+	s2.refIndex = 0.95;
+	Color_t c21(1.0,1.0,0.0);
+	Color_t c22(1.0,1.0,0.0);
+	s2.setMaterial(c21, c22, 0.075,0.75,1.0, 40.0);
 
-	scene.add(&light);
+	scene.add(&s2);
+
+
+	/** Light **/
+	Point_t pl1(-2000.0,0,0);
+	Color_t cl1(1.0,1.0,1.0);
+	Lightsrc_t light1(pl1, cl1);
+	scene.add(&light1);
+
+	Point_t pl2(1000.0,0,0);
+	Color_t cl2(1.0,1.0,1.0);
+	Lightsrc_t light2(pl2, cl2);
+	scene.add(&light2);
+
 
 	camera.render(scene, HEIGHT, WIDTH, outputColor, 0, DEPTH);
 

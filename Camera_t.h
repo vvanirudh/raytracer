@@ -49,8 +49,8 @@ public:
 
 	Color_t computeColor(Ray_t r, int depth, Scene_t* s, int DEPTH)
 	{
-		Color_t ambientColor(1,1,1);
-		// depth++;
+		Color_t ambientColor(0,0,0);
+		depth++;
 		Color_t pixelColor;
 		int nObjects = s->Objects.size();
 		bool intersectRay = false;
@@ -69,9 +69,10 @@ public:
 			{
 				if(tempInt != r.org)
 				{
-					shadow = true;
+					
 					if(abs(tempDist) < finalDist)
 					{
+						shadow = true;
 						finalDist = abs(tempDist);
 						finalInt = tempInt;
 						obj = (s->Objects[i]);
@@ -79,12 +80,12 @@ public:
 				}
 			}
 		}
-		vector<Data*> dataVec;
-		Data data;
+		vector<Data> dataVec;
+		Data data1;
 		if(shadow)
 		{
 			
-
+			Data data;
 			intersectRay = false;
 			tempDist = 0.0;
 			finalDist = 1000000.0;
@@ -104,7 +105,7 @@ public:
 
 				shadowDist = shadowray.org.distanceBetween(finalInt);
 
-				shadowDist = shadowDist - 0.000001;
+				shadowDist = shadowDist - 0.01;
 
 				for(int i=0;i<nObjects;i++)
 				{
@@ -145,12 +146,13 @@ public:
 				refDir.normalizeVector();
 				refRay.setDirection(refDir);
 				data.refRay = refRay;
-
-				dataVec.push_back(&data);
+				data1 = data;
+				if(finalDist > shadowDist)
+					dataVec.push_back(data);
 			}
 
 
-			if(finalDist > shadowDist)
+			if(!(dataVec.empty()))
 			{
 				obj->phong->illuminate(dataVec, ambientColor, obj->diffuseColor, obj->specularColor, obj->diffuseColor);
 				// obj->phong->illuminate()
@@ -171,7 +173,7 @@ public:
 				{
 					Ray_t reflRay(finalInt);
 					Vector_t reflDir;
-					reflDir = r.dir - 2*(r.dir*data.normal)*(data.normal);
+					reflDir = r.dir - 2*(r.dir*data1.normal)*(data1.normal);
 					reflDir.normalizeVector();
 					reflRay.setDirection(reflDir);
 
@@ -179,6 +181,7 @@ public:
 
 					// refColor.setColor(computeColor(reflRay, depth, s, DEPTH));
 					refColor = computeColor(reflRay, depth, s, DEPTH);
+					cout<<refColor;
 					pixelColor.r += reflectance * refColor.r;
 					pixelColor.b += reflectance * refColor.b;
 					pixelColor.g += reflectance * refColor.g;
@@ -188,7 +191,7 @@ public:
 				{
 					Ray_t transmitRay(finalInt);
 					Vector_t normal;
-					normal = -(data.normal);
+					normal = -(data1.normal);
 					double transmittance = obj->transmittance;
 					double refIndex = obj->refIndex;
 					double n = 1/(refIndex);
@@ -225,7 +228,7 @@ public:
 		}
 		else
 		{
-			pixelColor.setColor(0,0,0);
+			pixelColor.setColor(1,1,1);
 		}
 		return pixelColor;
 	}
