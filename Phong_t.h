@@ -76,6 +76,12 @@ public:
 	void illuminate(vector<Data*> vec, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
     {
         //SPECULAR COMPONENT
+
+    	// cout<<ambient<<endl;
+    	// cout<<diffuse<<endl;
+    	// cout<<specular<<endl;
+
+
         ambColor.setColor(ka * ambient.r * objColor.r , ka * ambient.g * objColor.g , ka * ambient.b * objColor.b );
 
         double ac_dr = 0,ac_dg = 0,ac_db = 0,ac_sr = 0,ac_sg = 0,ac_sb = 0;
@@ -103,6 +109,8 @@ public:
         color.setColor(ka * ambColor.r + kd * ac_dr + ks * ac_sr,
                         ka * ambColor.g + kd * ac_dg + ks * ac_sg,
                         ka * ambColor.b + kd * ac_db + ks * ac_sb);
+
+        // cout<<"Final Color: "<<color;
     }
 
 	void illuminateAmbient(Color_t ambient, Color_t diffuse)

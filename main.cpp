@@ -15,8 +15,8 @@
 
 using namespace std;
 
-int HEIGHT =  500;
-int  WIDTH =  500;
+int HEIGHT =  800;
+int  WIDTH =  800;
 double NEARPLANE = 1;
 double SCALEFACTOR = 0.0075;
 
@@ -32,8 +32,8 @@ void init()
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	// gluOrtho2D(0,HEIGHT,WIDTH,0);
-	glOrtho(0,HEIGHT,WIDTH,0,-1,1);
+	gluOrtho2D(0,HEIGHT,WIDTH,0);
+	// glOrtho(0,HEIGHT,WIDTH,0,-1,1);
 
 	outputColor = new Color_t*[HEIGHT];
 	for(int i=0;i<HEIGHT;i++)
@@ -59,7 +59,7 @@ void init()
 	Scene_t scene(NEARPLANE,SCALEFACTOR);
 
 	Phong_t ps1;
-	Point_t p4(0.43,0.2, 0.9);
+	Point_t p4(0.1,1.0, 0.1);
 	Sphere_t s1(p4, 0.6);
 
 	s1.setPhong(&ps1);
@@ -69,7 +69,7 @@ void init()
 	
 	Color_t c1(1.0,1.0,1.0);
 	Color_t c2(1.0,1.0,1.0);
-	s1.setMaterial(c1,c2 , 0.075,0.075,0.2, 20.0);
+	s1.setMaterial(c1,c2 , 0.75,0.75,0.2, 20.0);
 
 	scene.add(&s1);
 
@@ -80,6 +80,7 @@ void init()
 	scene.add(&light);
 
 	camera.render(scene, HEIGHT, WIDTH, outputColor, 0, DEPTH);
+
 }
 
 

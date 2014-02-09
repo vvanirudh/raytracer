@@ -35,23 +35,24 @@ public:
 		{
 			for(int y = -w/2;y<w/2; y++)
 			{
-				// finalColor[x][y].setColor(0,0,0);
+				finalColor[x + (h/2)][y + (w/2)].setColor(0,0,0);
 				s.releaseRay(&cameraRay,x,y);
 				// finalColor[x][y].setColor(computeColor(cameraRay, depth, s));
 				Color_t c;
-				c = computeColor(cameraRay, depth, s, DEPTH);
-				// finalColor[x][y] = c;
-				cout<<c.r<<" "<<c.g<<" "<<c.b<<"\n";
+				c = computeColor(cameraRay, depth, &s, DEPTH);
+				// cout<<c;
+				finalColor[x+(h/2)][y+(w/2)].setColor(c);
+				// cout<<c.r<<" "<<c.g<<" "<<c.b<<"\n";
 			}
 		}
 	}
 
-	Color_t computeColor(Ray_t r, int depth, Scene_t s, int DEPTH)
+	Color_t computeColor(Ray_t r, int depth, Scene_t* s, int DEPTH)
 	{
 		Color_t ambientColor(1,1,1);
-		depth++;
+		// depth++;
 		Color_t pixelColor;
-		list<Object_t*>::iterator objItr;
+		int nObjects = s->Objects.size();
 		bool intersectRay = false;
 		Object_t * obj;
 		Point_t tempInt;
@@ -61,9 +62,9 @@ public:
 		bool shadow = false;
 		double shadowDist;
 
-		for(objItr = s.Objects.begin(); objItr!=s.Objects.end(); ++objItr)
+		for(int i=0;i<nObjects;i++)
 		{
-			intersectRay = (*objItr)->intersect(r, &tempDist, &tempInt);
+			intersectRay = s->Objects[i]->intersect(r, &tempDist, &tempInt);
 			if(intersectRay)
 			{
 				if(tempInt != r.org)
@@ -73,13 +74,13 @@ public:
 					{
 						finalDist = abs(tempDist);
 						finalInt = tempInt;
-						obj = *objItr;
+						obj = (s->Objects[i]);
 					}
 				}
 			}
 		}
 		vector<Data*> dataVec;
-		Data *data;
+		Data data;
 		if(shadow)
 		{
 			
@@ -90,23 +91,24 @@ public:
 
 			bool inShadow = false;
 
-			list<Lightsrc_t*>::iterator lightItr;
+			// vector<Lightsrc_t*>::iterator lightItr;
+			int nLights = s->Lights.size();
 
-			for(lightItr = s.Lights.begin(); lightItr!=s.Lights.end(); ++lightItr)
+			for(int j=0; j<nLights; ++j)
 			{
 				Ray_t shadowray;
-				shadowray.org = ((*lightItr)->getPos());
+				shadowray.org = (s->Lights[j]->getPos());
 
-				s.releaseShadowRay(&shadowray, &finalInt);
+				s->releaseShadowRay(&shadowray, &finalInt);
 				Object_t * objRef;
 
 				shadowDist = shadowray.org.distanceBetween(finalInt);
 
 				shadowDist = shadowDist - 0.000001;
 
-				for(objItr = s.Objects.begin();objItr!=s.Objects.end();++objItr)
+				for(int i=0;i<nObjects;i++)
 				{
-					intersectRay = (*objItr)->intersect(shadowray, &tempDist, &tempInt);
+					intersectRay = s->Objects[i]->intersect(shadowray, &tempDist, &tempInt);
 
 					if(intersectRay)
 					{
@@ -115,7 +117,7 @@ public:
 							if(abs(tempDist)< finalDist)
 							{
 								finalDist = abs(tempDist);
-								objRef = *objItr;
+								objRef = s->Objects[i];
 							}
 
 							/*** inShadow code **/
@@ -124,9 +126,9 @@ public:
 				}
 
 				
-				data->lSrc = (*lightItr);
-				data->inRay = shadowray;
-				data->normal = obj->getNormal(finalInt);
+				data.lSrc = s->Lights[j];
+				data.inRay = shadowray;
+				data.normal = obj->getNormal(finalInt);
 
 				Ray_t viewRay(finalInt);
 
@@ -134,17 +136,17 @@ public:
 				viewVec = r.org - finalInt;
 				viewVec.normalizeVector();
 				viewRay.setDirection(viewVec);
-				data->viewRay = viewRay;
-				data->point = finalInt;
+				data.viewRay = viewRay;
+				data.point = finalInt;
 
 				Ray_t refRay(finalInt);
 				Vector_t refDir;
-				refDir = 2*((shadowray.dir * data->normal) * (data->normal)) - (shadowray.dir);
+				refDir = 2*((shadowray.dir * data.normal) * (data.normal)) - (shadowray.dir);
 				refDir.normalizeVector();
 				refRay.setDirection(refDir);
-				data->refRay = refRay;
+				data.refRay = refRay;
 
-				dataVec.push_back(data);
+				dataVec.push_back(&data);
 			}
 
 
@@ -159,7 +161,7 @@ public:
 			}
 
 			pixelColor = obj->phong->color;
-			cout<<pixelColor.r<<" "<<pixelColor.g<<" "<<pixelColor.b<<endl;
+			// cout<<pixelColor.r<<" "<<pixelColor.g<<" "<<pixelColor.b<<endl;
 
 			if(depth < DEPTH)
 			{
@@ -169,7 +171,7 @@ public:
 				{
 					Ray_t reflRay(finalInt);
 					Vector_t reflDir;
-					reflDir = r.dir - 2*(r.dir*data->normal)*(data->normal);
+					reflDir = r.dir - 2*(r.dir*data.normal)*(data.normal);
 					reflDir.normalizeVector();
 					reflRay.setDirection(reflDir);
 
@@ -186,12 +188,12 @@ public:
 				{
 					Ray_t transmitRay(finalInt);
 					Vector_t normal;
-					normal = -data->normal;
+					normal = -(data.normal);
 					double transmittance = obj->transmittance;
 					double refIndex = obj->refIndex;
 					double n = 1/(refIndex);
 
-					if((data->normal * r.dir)<0)
+					if((data.normal * r.dir)<0)
 					{
 						normal = -normal;
 						n = 1/n;
@@ -219,10 +221,11 @@ public:
 					}
 				}
 			}
+			// cout<<pixelColor;
 		}
 		else
 		{
-			pixelColor.setColor(0,0.6,0);
+			pixelColor.setColor(0,0,0);
 		}
 		return pixelColor;
 	}

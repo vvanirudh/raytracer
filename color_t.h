@@ -1,6 +1,8 @@
 #ifndef COLOR_T_H_
 #define COLOR_T_H_
 
+using namespace std;
+
 class Color_t
 {
 	public:
@@ -78,6 +80,13 @@ class Color_t
 		b = v.b;
 		return *this;
 		}
+
 };
+
+ostream & operator<<(ostream & os, const Color_t& c)
+		{
+			os<<"R: "<<c.r<<" G: "<<c.g<<" B: "<<c.b<<endl;
+			return os;
+		}
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "Object_t.h"
 #include <list>
+#include <vector>
 #include "Lightsrc_t.h"
 #include "ray_t.h"
 #include "Point_t.h"
@@ -13,8 +14,8 @@ public:
 	double nearPlane;
 	double scaleFactor;
 
-	list<Object_t*> Objects;
-	list<Lightsrc_t*> Lights;
+	vector<Object_t*> Objects;
+	vector<Lightsrc_t*> Lights;
 
 	Scene_t()
 	{
