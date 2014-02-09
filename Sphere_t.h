@@ -23,39 +23,61 @@ public:
 		c = (r.org - center)*(r.org -center) - radius*radius;
 		D = b*b - 4*a*c;
 
-		if(D < 0)
-			return false;
-
-		double dist;
-
-		d1 = (-b - sqrt(D))/2.0;
-		d2 = (-b + sqrt(D))/2.0;
+		bool val = false;
+		double ndist,odist;
 		
-		if(abs(d1) > abs(d2))
-		{
-			*d = d2;
-			dist = d1;
+		if(D>0){
+			d1 = (-b - sqrt(D))/2.0;
+			d2 = (-b + sqrt(D))/2.0;
+
+			
+			if(abs(d1) > abs(d2))
+			{
+				*d = d2;
+				odist = d1;
+				ndist = d2;
+			}
+			else
+			{
+				*d = d1;
+				odist = d2;
+				ndist = d1;
+			}
+
+			if(abs(*d)>0.75)
+				val = true;
 		}
-		else
+		else if(D==0)
 		{
-			*d = d1;
-			dist = d2;
+			*d = -b/2;
+			if(abs(*d)>0.75)
+				val = true;
 		}
 
-		(*P).x = r.org.x + (r.dir.x)*(*d);
-		(*P).y = r.org.y + (r.dir.y)*(*d);
-		(*P).z = r.org.z + (r.dir.z)*(*d);
-
-
-		if(*P == r.org)
-		{
-			*d = dist;
+		if(val){
 			(*P).x = r.org.x + (r.dir.x)*(*d);
 			(*P).y = r.org.y + (r.dir.y)*(*d);
 			(*P).z = r.org.z + (r.dir.z)*(*d);
+
+
+			if(*P == r.org || (abs(((*P).x) - r.org.x) < 0.01 && abs(((*P).y) - r.org.y) < 0.01 && abs(((*P).z) - r.org.z) < 0.01))
+			{
+				// cout<<"MACHAXX\n";
+				// *d = odist;
+				// (*P).x = r.org.x + (r.dir.x)*(*d);
+				// (*P).y = r.org.y + (r.dir.y)*(*d);
+				// (*P).z = r.org.z + (r.dir.z)*(*d);
+				val = false;
+			}
 		}
 
-		return true;
+		Vector_t vec;
+		vec = *P - r.org;
+		double ret = vec * r.dir;
+		if(ret>0)
+			val = false;
+
+		return val;
 	}
 
 	Vector_t getNormal(Point_t p)

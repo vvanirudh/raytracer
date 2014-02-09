@@ -106,7 +106,7 @@ public:
             
         // DIFFUSE COMPONENT
         double d = vec[i].inRay.dir * vec[i].normal;
-        cout<<"d value: "<<d<<endl;
+        // cout<<"d value: "<<d<<endl;
         Color_t lColor;
         lColor = vec[i].lSrc->getColor();
         ac_dr = ac_dr + (lColor.r * (diffuse.r) * d);
@@ -135,7 +135,7 @@ public:
 		color.setColor(ka*ambient.r*diffuse.r,
 						ka*ambient.g*diffuse.g,
 						ka*ambient.b*diffuse.b);
-		cout<<color;
+		// cout<<color;
 	}
 
 };

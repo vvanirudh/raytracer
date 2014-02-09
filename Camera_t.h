@@ -84,7 +84,6 @@ public:
 		Data data1;
 		if(shadow)
 		{
-			
 			Data data;
 			intersectRay = false;
 			tempDist = 0.0;
@@ -113,6 +112,7 @@ public:
 
 					if(intersectRay)
 					{
+
 						if(tempInt!=finalInt)
 						{
 							if(abs(tempDist)< finalDist)
@@ -163,6 +163,7 @@ public:
 			}
 
 			pixelColor = obj->phong->color;
+			// cout<<pixelColor;
 			// cout<<pixelColor.r<<" "<<pixelColor.g<<" "<<pixelColor.b<<endl;
 
 			if(depth < DEPTH)
@@ -181,7 +182,7 @@ public:
 
 					// refColor.setColor(computeColor(reflRay, depth, s, DEPTH));
 					refColor = computeColor(reflRay, depth, s, DEPTH);
-					cout<<refColor;
+					// cout<<refColor;
 					pixelColor.r += reflectance * refColor.r;
 					pixelColor.b += reflectance * refColor.b;
 					pixelColor.g += reflectance * refColor.g;
@@ -218,6 +219,9 @@ public:
 						transmitRay.setDirection(transmitDir);
 						Color_t transmitColor;
 						transmitColor = (computeColor(transmitRay, depth, s, DEPTH));
+
+						cout<<transmitColor;
+
 						pixelColor.r += transmittance * transmitColor.r;
 						pixelColor.b += transmittance * transmitColor.b;
 						pixelColor.g += transmittance * transmitColor.g;
@@ -228,7 +232,7 @@ public:
 		}
 		else
 		{
-			pixelColor.setColor(1,1,1);
+			pixelColor.setColor(0,0,0);
 		}
 		return pixelColor;
 	}

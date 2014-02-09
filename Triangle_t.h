@@ -52,41 +52,111 @@ public:
 		if((det > -0.0001) && (det < 0.0001))
 			return false;
 
-		double inv_det = 1/det;
+		double inv_det = 1.0/det;
 
 		Vector_t T;
 		T = r.org - v[0];
 
-		double u = (T * p) * inv_det;
+		double u = inv_det * (T * p);
 
 		if(u<0 || u>1)
 			return false;
 
 		Vector_t Q;
 		Q = T ^ side1;
-		double v_t = (r.dir * Q) * inv_det;
+		double v_t = inv_det * (r.dir * Q);
 
 		if(v_t<0 || u+v_t>1)
 			return false;
 
-		double t = (side2 * Q) * inv_det;
-
-		if(t>0.0001)
-		{
+		double t = inv_det * (side2 * Q) ;
+		
+		cout<<t<<endl;
+		// if(t>0.01)
+		// {
 			(*point) = (1-u-v_t)*v[0] + u*v[1] + v_t*v[1];
 			*d = t;
 			return true;
-		}
+		// }
 
-		return false;
+		// return false;
 
 		/* http://www.scratchapixel.com/lessons/3d-basic-lessons/lesson-9-ray-triangle-intersection/m-ller-trumbore-algorithm/ 
 		/* Need to understand the algorithm */
 		
 	}
-	//Destructor
-	//~Triangle_t()
 
-	/* data */
+// 	intersect_triangle(double orig[3], double dir[3],
+//                    double vert0[3], double vert1[3], double vert2[3],
+//                    double *t, double *u, double *v)
+// {
+//    double edge1[3], edge2[3], tvec[3], pvec[3], qvec[3];
+//    double det,inv_det;
+
+//    /* find vectors for two edges sharing vert0 */
+//    SUB(edge1, vert1, vert0);
+//    SUB(edge2, vert2, vert0);
+
+//    /* begin calculating determinant - also used to calculate U parameter */
+//    CROSS(pvec, dir, edge2);
+
+//    /* if determinant is near zero, ray lies in plane of triangle */
+//    det = DOT(edge1, pvec);
+
+// #ifdef TEST_CULL           /* define TEST_CULL if culling is desired */
+//    if (det < EPSILON)
+//       return 0;
+
+//    /* calculate distance from vert0 to ray origin */
+//    SUB(tvec, orig, vert0);
+
+//    /* calculate U parameter and test bounds */
+//    *u = DOT(tvec, pvec);
+//    if (*u < 0.0 || *u > det)
+//       return 0;
+
+//    /* prepare to test V parameter */
+//    CROSS(qvec, tvec, edge1);
+
+//      calculate V parameter and test bounds 
+//    *v = DOT(dir, qvec);
+//    if (*v < 0.0 || *u + *v > det)
+//       return 0;
+
+//    /* calculate t, scale parameters, ray intersects triangle */
+//    *t = DOT(edge2, qvec);
+//    inv_det = 1.0 / det;
+//    *t *= inv_det;
+//    *u *= inv_det;
+//    *v *= inv_det;
+// #else                    /* the non-culling branch */
+//    if (det > -EPSILON && det < EPSILON)
+//      return 0;
+//    inv_det = 1.0 / det;
+
+//    /* calculate distance from vert0 to ray origin */
+//    SUB(tvec, orig, vert0);
+
+//    /* calculate U parameter and test bounds */
+//    *u = DOT(tvec, pvec) * inv_det;
+//    if (*u < 0.0 || *u > 1.0)
+//      return 0;
+
+//    /* prepare to test V parameter */
+//    CROSS(qvec, tvec, edge1);
+
+//    /* calculate V parameter and test bounds */
+//    *v = DOT(dir, qvec) * inv_det;
+//    if (*v < 0.0 || *u + *v > 1.0)
+//      return 0;
+
+//    /* calculate t, ray intersects triangle */
+//    *t = DOT(edge2, qvec) * inv_det;
+
+//    cout<<"t: "<<*t<<endl;
+// #endif
+//    return 1;
+// }
+	
 };
 #endif
