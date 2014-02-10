@@ -15,6 +15,19 @@ public:
 		radius = r;
 	}
 
+	Sphere_t(const Sphere_t& s)
+	{
+		center = s.center;
+		radius = s.radius;
+		normal = s.normal;
+		phong = s.phong;
+		diffuseColor = s.diffuseColor;
+		specularColor = s.specularColor;
+		reflectance = s.reflectance;
+		transmittance = s.transmittance;
+		refIndex = s.refIndex;
+	}
+
 	bool intersect(Ray_t r, double* d, Point_t *P)//have to check some vector and point related issues
 	{
 		double a,b,c,D,q,d1,d2,temp; //a,b,c are the coefficients of equation 

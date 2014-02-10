@@ -30,6 +30,20 @@ public:
 
 	}
 
+	Triangle_t(const Triangle_t& s)
+	{
+		v[0] = s.v[0];
+		v[1] = s.v[1];
+		v[2] = s.v[2];
+		normal = s.normal;
+		phong = s.phong;
+		diffuseColor = s.diffuseColor;
+		specularColor = s.specularColor;
+		reflectance = s.reflectance;
+		transmittance = s.transmittance;
+		refIndex = s.refIndex;
+	}
+
 	Vector_t getNormal(Point_t t)
 	{
 		return normal;

@@ -1,0 +1,89 @@
+//loadscene_file
+
+
+void loadscene(Scene_t * S)
+{
+    string f;
+    cout<<"Enter the scene file name to be loaded\n";
+    cin>>f;
+    ifstream input_file;
+    input_file.open(f.c_str());
+    int i = 0;
+    while(input_file.good())
+    {
+        string str, par;
+        getline(input_file,str);
+        int psn;
+        vector<string> parse;
+        while((psn = str.find(" ")) != string::npos)
+        {
+            par = str.substr(0,psn);
+            parse.push_back(par);
+            str = str.substr(psn+1);
+            //std::cout<<"2";
+        }
+        if(i == 0)
+        {
+            WIDTH = atoi(parse[0].c_str());
+            HEIGHT = atoi(parse[1].c_str());
+            DEPTH  = atoi(parse[2].c_str());
+        }
+        // else if(i == 1)
+        // {
+        //     S.nearPlane   = atof(parse[0].c_str());
+        //     S.scaleFactor = atof(parse[1].c_str());
+        // }
+        else if(i == 1)
+        {
+            Point_t p(atof(parse[0].c_str()), atof(parse[1].c_str()), atof(parse[2].c_str()));
+            eye.pos = p;
+            Point_t p1(atof(parse[3].c_str()),atof(parse[4].c_str()),atof(parse[5].c_str()));
+            eye.lookAt = p1;
+            Point_t p2(atof(parse[6].c_str()),atof(parse[7].c_str()),atof(parse[8].c_str()));
+            eye.up = p2;
+        }
+        else
+        {
+            if(parse[0] == "S")
+            {
+                // setMaterial(Color_t diff, Color_t spec, double ambCoeff, double diffCoeff, double specCoeff, double exponent)
+                Point_t a(atof(parse[1].c_str()), atof(parse[2].c_str()), atof(parse[3].c_str()));
+                Sphere_t S1(a,atof(parse[4].c_str()));
+                Color_t diff(atof(parse[5].c_str()), atof(parse[6].c_str()), atof(parse[7].c_str()));
+                Color_t spec(atof(parse[8].c_str()), atof(parse[9].c_str()), atof(parse[10].c_str()));
+                Phong_t ps1;
+                S1.setPhong(&ps1);
+                S1.setMaterial(diff,spec,atof(parse[11].c_str()),atof(parse[12].c_str()),atof(parse[13].c_str()),atof(parse[14].c_str()));
+                S1.reflectance = atof(parse[15].c_str());
+				S1.transmittance = atof(parse[16].c_str());
+				S1.refIndex = atof(parse[17].c_str());
+                S->add(&S1);
+            }
+            else if(parse[0] == "T")
+            {
+                Point_t a(atof(parse[1].c_str()), atof(parse[2].c_str()), atof(parse[3].c_str()));
+                Point_t b(atof(parse[3].c_str()), atof(parse[5].c_str()), atof(parse[6].c_str()));
+                Point_t c(atof(parse[7].c_str()), atof(parse[8].c_str()), atof(parse[9].c_str()));
+                Triangle_t T1(a,b,c);
+                Color_t diff(atof(parse[10].c_str()), atof(parse[11].c_str()), atof(parse[12].c_str()));
+                Color_t spec(atof(parse[13].c_str()), atof(parse[14].c_str()), atof(parse[15].c_str()));
+                Phong_t pT1;
+                T1.setPhong(&pT1);
+                T1.setMaterial(diff,spec,atof(parse[16].c_str()),atof(parse[17].c_str()),atof(parse[18].c_str()),atof(parse[19].c_str()));
+                T1.reflectance = atof(parse[20].c_str());
+				T1.transmittance = atof(parse[21].c_str());
+				T1.refIndex = atof(parse[22].c_str());
+                S->add(&T1);
+            }    
+            else if(parse[0] == "L")
+            {
+                Point_t a(atof(parse[1].c_str()), atof(parse[2].c_str()), atof(parse[3].c_str()));
+                Color_t b(atof(parse[4].c_str()), atof(parse[5].c_str()), atof(parse[6].c_str()));
+                Lightsrc_t L1(a,b);
+                S->add(&L1);
+            }
+        }
+        i = i + 1;
+    }
+    input_file.close();
+}

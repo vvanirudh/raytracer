@@ -21,6 +21,12 @@ public:
 		c = b;
 	}
 
+	Lightsrc_t(const Lightsrc_t& l)
+	{
+		p = l.p;
+		c = l.c;
+	}
+
 	Point_t getPos()
 	{
 		return p;
