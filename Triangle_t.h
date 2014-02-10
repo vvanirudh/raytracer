@@ -19,14 +19,15 @@ public:
 		// normal in the constructor itself
 
 		Vector_t side1;
-		side1 = v[0]-v[1];
+		side1 = v[1]-v[0];
 		side1.normalizeVector();
 		Vector_t side2;
-		side2 = v[1]-v[2];
+		side2 = v[2]-v[0];
 		side2.normalizeVector();
 
 		normal = side1 ^ side2; //Cross product of sides of the triangle gives us the normal for the triangle
 		normal.normalizeVector();
+		normal = -normal;
 
 	}
 
@@ -53,7 +54,7 @@ public:
 	{
 		/* The following algorithm is called 'Moller-Trumbore intersection algorithm', the information is taken
 		from Wikipedia */
-
+		// cout<<"lol\n";
 		Vector_t side1;
 		side1 = v[1]-v[0];
 		Vector_t side2;
@@ -85,7 +86,7 @@ public:
 
 		double t = inv_det * (side2 * Q) ;
 		
-		cout<<t<<endl;
+		// cout<<t<<endl;
 		// if(t>0.01)
 		// {
 			(*point) = (1-u-v_t)*v[0] + u*v[1] + v_t*v[1];

@@ -97,6 +97,18 @@ bool operator!=(const Point_t& p1, const Point_t& p2)
 	return !(p1==p2);
 }
 
+Point_t operator+(const Point_t & p1, const Vector_t& v)
+{
+	Point_t u(p1.x+v.x, p1.y+v.y, p1.z*v.z);
+	return u;
+}
+
+Point_t operator+(const Vector_t& v, const Point_t & p1)
+{
+	Point_t u(p1.x+v.x, p1.y+v.y, p1.z*v.z);
+	return u;
+}
+
 ostream& operator<<(ostream& out, const Point_t& p)
 {
 	out<<"("<<p.x<<","<<p.y<<","<<p.z<<")";

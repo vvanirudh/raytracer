@@ -14,6 +14,7 @@
 #include "ray_t.h"
 #include <fstream>
 #include <cstdlib>
+#include "Cylinder_t.h"
 
 using namespace std;
 
@@ -26,6 +27,34 @@ int DEPTH;
 
 Color_t ** outputColor;
 
+bool recording=true;
+unsigned char *pRGB;
+
+
+void capture_frame()
+{
+  //global pointer float *pRGB
+  pRGB = new unsigned char [3 * (WIDTH+1) * (HEIGHT + 1) ];
+
+
+  // set the framebuffer to read
+  //default for double buffered
+  glReadBuffer(GL_BACK);
+
+  glPixelStoref(GL_PACK_ALIGNMENT,1);//for word allignment
+  
+  glReadPixels(0, 0, WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, pRGB);
+  char filename[200];
+  sprintf(filename,"images/frame.ppm");
+  std::ofstream out(filename, std::ios::out);
+  out<<"P6"<<std::endl;
+  out<<WIDTH<<" "<<HEIGHT<<" 255"<<std::endl;
+  out.write(reinterpret_cast<char const *>(pRGB), (3 * (WIDTH+1) * (HEIGHT + 1)) * sizeof(int));
+  out.close();
+
+  //function to store pRGB in a file named count
+  delete pRGB;
+}
 
 void init()
 {
@@ -52,14 +81,16 @@ void init()
 	Scene_t scene(NEARPLANE, SCALEFACTOR);
 	Camera_t *camera;
 	string f;
-    cout<<"Enter the scene file name to be loaded\n";
-    cin>>f;
+    // cout<<"Enter the scene file name to be loaded\n";
+    // cin>>f;
     ifstream input_file;
-    input_file.open(f.c_str());
+    // input_file.open(f.c_str());
+    input_file.open("sample_file");
     int i = 0;
     vector<Sphere_t> spheres;
     std::vector<Triangle_t> triangles;
     vector<Lightsrc_t> lights;
+    std::vector<Cylinder_t> cylinders;
     while(input_file.good())
     {
         string str, par;
@@ -132,6 +163,27 @@ void init()
                 // scene.add(&L1);
                 lights.push_back(L1);
             }
+            else if(parse[0] == "CL")
+            {
+            	Point_t a(atof(parse[1].c_str()), atof(parse[2].c_str()), atof(parse[3].c_str()));
+            	double r = atof(parse[4].c_str());
+            	double h = atof(parse[5].c_str());
+            	Vector_t v(atof(parse[6].c_str()), atof(parse[7].c_str()), atof(parse[8].c_str()));
+            	Cylinder_t cl1(a,r,h,v);
+            	Color_t diff(atof(parse[9].c_str()), atof(parse[10].c_str()), atof(parse[11].c_str()));
+                Color_t spec(atof(parse[12].c_str()), atof(parse[13].c_str()), atof(parse[14].c_str()));
+                Phong_t pcl1;
+                cl1.setPhong(&pcl1);
+                cl1.setMaterial(diff,spec,atof(parse[15].c_str()),atof(parse[16].c_str()),atof(parse[17].c_str()),atof(parse[18].c_str()));
+                cl1.reflectance = atof(parse[19].c_str());
+				cl1.transmittance = atof(parse[20].c_str());
+				cl1.refIndex = atof(parse[21].c_str());
+				cylinders.push_back(cl1);
+            }
+            else if(parse[0] == "#")
+            {
+
+            }
         }
        i++;
    }
@@ -140,16 +192,25 @@ void init()
    for (std::vector<Sphere_t>::iterator i = spheres.begin(); i != spheres.end(); ++i)
    {
    		scene.add(&(*i));
+   		cout<<"Sphere added\n";
    }
 
    for (std::vector<Triangle_t>::iterator i = triangles.begin(); i != triangles.end(); ++i)
    {
+   		cout<<"Triangle added\n";
    		scene.add(&(*i));
    		
    }
 
    for (std::vector<Lightsrc_t>::iterator i = lights.begin(); i != lights.end(); ++i)
    {
+   		cout<<"Light added\n";
+   		scene.add(&(*i));
+   }
+
+   for (std::vector<Cylinder_t>::iterator i = cylinders.begin(); i != cylinders.end(); ++i)
+   {
+   		cout<<"Cylinder added\n";
    		scene.add(&(*i));
    }
 
@@ -248,6 +309,8 @@ void display()
 	}
 
 	glFlush();
+	if (recording)
+		capture_frame();
 	glutSwapBuffers();
 }
 

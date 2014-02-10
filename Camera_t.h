@@ -29,25 +29,31 @@ public:
 
 	void render(Scene_t s, int h, int w, Color_t** finalColor, int depth, int DEPTH)
 	{
-		Ray_t cameraRay(pos);
+		Ray_t cameraRay1(pos);
+		Ray_t cameraRay2(pos);
+		Ray_t cameraRay3(pos);
+		Ray_t cameraRay4(pos);
 
 		for(int x = -h/2; x<h/2; x++)
 		{
 			for(int y = -w/2;y<w/2; y++)
 			{
 				finalColor[x + (h/2)][y + (w/2)].setColor(0,0,0);
-				s.releaseRay(&cameraRay,x,y);
+				s.releaseRay(&cameraRay1,x+0.25,y);
+				s.releaseRay(&cameraRay2,x,y+0.25);
+				s.releaseRay(&cameraRay3,x,y);
+				s.releaseRay(&cameraRay4,x,y-0.25);
 				// finalColor[x][y].setColor(computeColor(cameraRay, depth, s));
 				Color_t c1, c2, c3, c4;
-				c1 = computeColor(cameraRay, depth, &s, DEPTH);
-				c2 = computeColor(cameraRay, depth, &s, DEPTH);
-				c3 = computeColor(cameraRay, depth, &s, DEPTH);
-				c4 = computeColor(cameraRay, depth, &s, DEPTH);
+				c1 = computeColor(cameraRay1, depth, &s, DEPTH);
+				c2 = computeColor(cameraRay2, depth, &s, DEPTH);
+				c3 = computeColor(cameraRay3, depth, &s, DEPTH);
+				c4 = computeColor(cameraRay4, depth, &s, DEPTH);
 
 				Color_t c;
-				c.r = (c1.r+c2.r+c3.r+c4.r);
-				c.g = (c1.g+c2.g+c3.g+c4.g);
-				c.b = (c1.b+c2.b+c3.b+c4.b);
+				c.r = (c1.r+c2.r+c3.r+c4.r)/4.0;
+				c.g = (c1.g+c2.g+c3.g+c4.g)/4.0;
+				c.b = (c1.b+c2.b+c3.b+c4.b)/4.0;
 				// cout<<c;
 				finalColor[x+(h/2)][y+(w/2)].setColor(c);
 				// cout<<c.r<<" "<<c.g<<" "<<c.b<<"\n";
@@ -92,6 +98,7 @@ public:
 		Data data1;
 		if(shadow)
 		{
+			// cout<<"HIT\n";
 			Data data;
 			intersectRay = false;
 			tempDist = 0.0;
@@ -155,6 +162,8 @@ public:
 				refRay.setDirection(refDir);
 				data.refRay = refRay;
 				data1 = data;
+				// cout<<"Shadow ray : "<<shadowDist<<endl;
+				// cout<<"Final ray : "<<finalDist<<endl;
 				if(finalDist > shadowDist)
 					dataVec.push_back(data);
 			}
@@ -162,6 +171,7 @@ public:
 
 			if(!(dataVec.empty()))
 			{
+				// cout<<"lol\n";
 				obj->phong->illuminate(dataVec, ambientColor, obj->diffuseColor, obj->specularColor, obj->diffuseColor);
 				// obj->phong->illuminate()
 			}

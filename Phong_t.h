@@ -65,28 +65,6 @@ public:
 		n = e;
 	}
 
-	// void illuminate(Data data, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
-	// {
-	// 	//SPECULAR COMPONENT
-	// 	ambColor.setColor(ka * ambient.r * objColor.r , ka * ambient.g * objColor.g , ka * ambient.b * objColor.b );
-
-	// 	// DIFFUSE COMPONENT
-	// 	double d = data.inRay.dir * data.normal;
-	// 	Color_t lColor = data.lSrc->getColor();
-
-	// 	Color_t diffuseColor(lColor.r * (diffuse.r) * d , lColor.g * (diffuse.g) * d , lColor.b * (diffuse.b) * d);
-
-	// 	//SPECULAR COMPONENT
-	// 	double e = data.refRay.dir * data.viewRay.dir;
-	// 	e = pow(e, n);
-
-	// 	Color_t specularColor(lColor.r * (specular.r) * e, lColor.g * (specular.g) * e, lColor.b * (specular.b) * e);
-
-	// 	//FINAL COLOR
-	// 	color.setColor(ka * ambColor.r + kd * diffuseColor.r + ks * specularColor.r,
-	// 					ka * ambColor.g + kd * diffuseColor.g + ks * specularColor.g,
-	// 					ka * ambColor.b + kd * diffuseColor.b + ks * specularColor.b);
-	// }
 
 	void illuminate(vector<Data> vec, Color_t ambient, Color_t diffuse, Color_t specular, Color_t objColor)
     {
